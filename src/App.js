@@ -1,5 +1,5 @@
 import './App.css';
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useCallback} from 'react';
 
 function App() {
   const [candidates, setCandidates] = useState([]);
@@ -7,7 +7,7 @@ function App() {
   const [search, setSearch] = useState('');
   const [searchlist, setSearchlist] = useState([]);
   const [rejected, setRejected] = useState(JSON.parse(localStorage.getItem('rejected'))  || []);
-  const [tab, setTab] = useState(window.location.pathname);
+  const [tab, ] = useState(window.location.pathname);
 
   useEffect(() => {
     fetch('https://s3-ap-southeast-1.amazonaws.com/he-public-data/users49b8675.json')
@@ -135,11 +135,11 @@ function App() {
     window.location = window.location.protocol + '//' + window.location.host+ '/';
   }
 
-  const searchCandidate = (candidate) => {
+  const searchCandidate = useCallback((candidate) => {
     if (candidate.name.toLowerCase().includes(search.toLowerCase())) {
       return true;
     }
-  }
+  },[search]);
 
   function card(canditate, buttons) {
     console.log(buttons)
@@ -170,7 +170,7 @@ function App() {
   useEffect(() => {
     // search in candidates
     setSearchlist(candidates.filter(searchCandidate));
-  }, [search])
+  }, [search, searchCandidate, candidates]);
 
   return (
     <div className="App" style={styles.outerContainer}>
@@ -210,7 +210,7 @@ function App() {
         {tab==="/" && createCard(searchlist, false)}
         {tab==="/sortlisted" && createCard(sortlist, false)}
         {tab==="/rejected" && createCard(rejected, false)}
-        {tab[1]===":" && createCard(candidates.filter(item => item.id == tab.slice(2)))}
+        {tab[1]===":" && createCard(candidates.filter(item => item.id.toString() === tab.slice(2)))}
       </div>
     </div>
   );
