@@ -203,12 +203,12 @@ function App() {
         </div>
         <div>
           <a href="/rejected" style={styles.navbarItem}>Rejected</a>
-          <a href="/sortlist" style={styles.navbarItem}>Sortlist</a>
+          <a href="/sortlisted" style={styles.navbarItem}>Sortlist</a>
         </div>
       </div>
       <div className="container" style={styles.container}>
         {tab==="/" && createCard(searchlist, false)}
-        {tab==="/sortlist" && createCard(sortlist, false)}
+        {tab==="/sortlisted" && createCard(sortlist, false)}
         {tab==="/rejected" && createCard(rejected, false)}
         {tab[1]===":" && createCard(candidates.filter(item => item.id == tab.slice(2)))}
       </div>
